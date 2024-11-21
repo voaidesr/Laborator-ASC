@@ -1,8 +1,9 @@
 .section .note.GNU-stack,"",@progbits
 .data
-    x: .long 11
-    formatString1: .asciz "Numarul %d e prim\n"
-    formatString2: .asciz "Numarul %d nu este prim\n"
+    x: .space 4
+    formatString1: .asciz "Yes\n"
+    formatString2: .asciz "No\n"
+    formatScanf: .asciz "%ld"
 
 .text
 prime:
@@ -12,7 +13,7 @@ prime:
     movl 8(%ebp), %ebx
     # verficam daca e 1
     cmp $1, %ebx
-    je et_nu_prim
+    jle et_nu_prim
     # verificam daca e 2
     cmp $2, %ebx
     je et_prim
@@ -43,6 +44,12 @@ et_finish:
 
 .global main
 main:
+    pushl $x
+    pushl $formatScanf
+    call scanf 
+    popl %ebx
+    popl %ebx
+
     pushl x
     call prime
     popl %ebx
@@ -50,18 +57,14 @@ main:
     je et_afisare_nu_prim
 
 et_afisare_prim:
-    pushl x
     pushl $formatString1
     call printf
-    popl %ebx
     popl %ebx
     jmp et_exit
 
 et_afisare_nu_prim:
-    pushl x
     pushl $formatString2
     call printf
-    popl %ebx
     popl %ebx
 
 
